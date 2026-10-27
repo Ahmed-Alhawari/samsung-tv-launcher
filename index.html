@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1920, height=1080">
+<title>Home Launcher</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- depth stack: wallpaper → clock → foreground cut-out → UI, so the clock tucks behind the scenery -->
+  <div id="wallpaper"></div>
+  <div id="shade"></div>
+  <header id="clock"><div id="time">--:--</div></header>
+  <div id="front"></div>
+
+  <main id="home">
+    <div id="topbar">
+      <div id="profiles"></div>
+      <div id="dateline"><span id="date"></span><span id="weather"><span id="wx-temp"></span><span id="wx-desc"></span></span></div>
+      <div id="moon" aria-label="Night mode"></div>
+    </div>
+
+    <section id="agenda" class="side left"><h3>Up next</h3><ul id="agenda-list"></ul></section>
+    <section id="inbox" class="side right" hidden><h3>Notifications</h3><ul id="inbox-list"></ul></section>
+
+    <section id="shelf"><h3 id="shelf-title">Keep watching</h3><div id="cards"></div></section>
+    <section id="dock-wrap"><div id="dock"></div></section>
+    <div id="ctx" hidden></div>
+
+  </main>
+
+  <div id="night-veil"></div>
+  <div id="saver" hidden></div>
+
+  <div id="picker" hidden>
+    <h2 id="picker-title"></h2>
+    <ul id="picker-list"></ul>
+    <p id="picker-foot" class="muted"></p>
+  </div>
+
+  <div id="toast" hidden></div>
+  <div id="banner" hidden></div>
+
+  <script src="config.js"></script>
+  <script src="config.local.js"></script>
+  <script src="app.js"></script>
+  <script src="screensaver.js"></script>
+  <script src="remote.js"></script>
+  <script src="notifications.js"></script>
+  <script src="agenda.js"></script>
+</body>
+</html>

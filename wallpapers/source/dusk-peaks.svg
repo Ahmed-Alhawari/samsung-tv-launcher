@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2c63"/><stop offset=".30" stop-color="#6a4a8f"/>
+      <stop offset=".52" stop-color="#d7708a"/><stop offset=".68" stop-color="#f6a58f"/><stop offset=".8" stop-color="#ffd2a4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="70%" r="42%">
+      <stop offset="0" stop-color="#ffe9c4" stop-opacity=".8"/><stop offset="1" stop-color="#ffb08a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="16"/></filter>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect width="1920" height="1080" fill="url(#glow)"/>
+  <g filter="url(#soft)">
+    <ellipse cx="380" cy="300" rx="420" ry="26" fill="#ff9aa8" opacity=".55"/>
+    <ellipse cx="1530" cy="250" rx="470" ry="22" fill="#d9a3ff" opacity=".5"/>
+    <ellipse cx="900" cy="560" rx="520" ry="16" fill="#ffd0c0" opacity=".45"/>
+    <ellipse cx="1650" cy="520" rx="360" ry="18" fill="#ff8fa0" opacity=".45"/>
+    <ellipse cx="230" cy="470" rx="330" ry="14" fill="#ffb8c0" opacity=".4"/>
+  </g>
+  <path fill="#8d5f97" opacity=".85" d="M0 1080V720l130-50 150 60 170-90 160 70 190-80 170 90 180-70 170 60 190-70 140 50 130-30v540z"/>
+  <path fill="#5e4585" opacity=".95" d="M0 1080V780l160-70 150 60 190-110 160 80 200-100 160 90 200-80 180 70 160-60 180 60 160-30v560z"/>
+</svg>

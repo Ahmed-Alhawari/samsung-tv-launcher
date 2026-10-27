@@ -1,0 +1,9 @@
+.DS_Store
+*.wgt
+.venv/
+__pycache__/
+
+.tv.env
+config.local.js
+icons/*
+!icons/inputs.jpg

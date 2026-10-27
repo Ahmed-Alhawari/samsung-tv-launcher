@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#09152e"/><stop offset=".4" stop-color="#27528c"/>
+      <stop offset=".68" stop-color="#86b4de"/><stop offset=".82" stop-color="#d9ebf8"/>
+    </linearGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="16"/></filter>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <g filter="url(#soft)" fill="#ffffff" opacity=".4">
+    <ellipse cx="420" cy="300" rx="400" ry="20"/><ellipse cx="1500" cy="240" rx="440" ry="18"/>
+    <ellipse cx="1000" cy="520" rx="480" ry="14"/>
+  </g>
+  <path fill="#7f9fc4" opacity=".85" d="M0 1080V720l150-60 170 70 180-100 160 80 190-90 170 90 180-80 170 70 180-70 140 50 130-30v530z"/>
+  <path fill="#5a7ba6" d="M0 1080V790l170-80 160 60 200-120 160 90 210-110 160 100 190-90 180 80 160-70 180 70 150-30v590z"/>
+</svg>

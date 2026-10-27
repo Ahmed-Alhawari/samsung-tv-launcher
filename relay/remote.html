@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0d12">
+<title>TV Remote</title>
+<style>
+  :root { --bg: #0b0d12; --card: #161922; --line: #262a36; --text: #f3f4f8; --dim: #8b90a0; --accent: #ffffff; --ok: #30d158; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.4 -apple-system, "SF Pro Text", Helvetica, Arial, sans-serif; }
+  body { padding: max(16px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom)); max-width: 520px; margin: 0 auto; }
+  header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  h1 { font-size: 26px; margin: 0; }
+  h2 { font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); margin: 0 0 12px; font-weight: 600; }
+  h2 small { text-transform: none; letter-spacing: 0; font-size: 13px; margin-left: 6px; color: var(--text); }
+  .pill { font-size: 13px; padding: 4px 12px; border-radius: 20px; background: var(--card); color: var(--dim); }
+  .pill.on { color: var(--ok); }
+  #banner { background: #3a2a10; color: #ffd28a; padding: 10px 14px; border-radius: 12px; margin-bottom: 14px; font-size: 14px; }
+  .card { background: var(--card); border-radius: 22px; padding: 16px; margin-bottom: 14px; }
+  .chips { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .chip { border: 0; background: var(--card); color: var(--dim); padding: 9px 18px; border-radius: 30px; font-size: 15px; }
+  .chip.active { background: #fff; color: #111; font-weight: 600; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  button:active { filter: brightness(1.4); }
+
+  #dpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 320px; margin: 4px auto 12px; }
+  #dpad button { aspect-ratio: 1.15; border: 0; border-radius: 20px; background: #21252f; font-size: 26px; }
+  #dpad .ok { background: #fff; color: #111; font-size: 20px; font-weight: 700; border-radius: 50%; }
+  #dpad .txt { font-size: 15px; color: var(--dim); }
+  .row { display: flex; gap: 8px; }
+  .row button { flex: 1; border: 0; background: #21252f; padding: 12px 6px; border-radius: 14px; font-size: 14px; }
+
+  .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .app { border: 0; background: none; text-align: center; padding: 0; }
+  .app i { display: grid; place-items: center; aspect-ratio: 1; border-radius: 22%; font-style: normal; font-size: 26px; font-weight: 700; margin-bottom: 6px;
+    background: linear-gradient(160deg, rgba(255,255,255,.28), rgba(255,255,255,0) 55%), var(--c, #444); }
+  .app span { font-size: 12px; color: var(--dim); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  form { display: flex; gap: 8px; }
+  input, select { font: inherit; color: var(--text); background: #0f1117; border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; min-width: 0; }
+  form input { flex: 1; }
+  .go { border: 0; background: #fff; color: #111; font-weight: 600; border-radius: 14px; padding: 0 18px; }
+  .hint { color: var(--dim); font-size: 13px; margin-top: 10px; }
+  .res { border-top: 1px solid var(--line); padding: 14px 0 4px; }
+  .res:first-child { border-top: 0; }
+  .res b { font-size: 17px; }
+  .res .y { color: var(--dim); margin-left: 6px; font-size: 14px; }
+  .res p { margin: 4px 0 10px; color: var(--dim); font-size: 14px; }
+  .tag { display: inline-block; font-size: 12px; padding: 2px 10px; border-radius: 20px; background: #262a36; margin-right: 6px; }
+  .acts { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .acts button { border: 0; background: #262a36; padding: 9px 14px; border-radius: 12px; font-size: 14px; }
+  .acts .primary { background: #fff; color: #111; font-weight: 600; }
+  .item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .item:first-child { border-top: 0; }
+  .item .dot { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; font-weight: 700; background: var(--c, #444); flex: none; }
+  .item div { flex: 1; min-width: 0; } .item small { color: var(--dim); display: block; }
+  .item .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item button { border: 0; background: none; color: var(--dim); font-size: 20px; padding: 6px 10px; }
+  details { margin-top: 10px; } summary { color: var(--dim); font-size: 14px; }
+  details form { flex-direction: column; margin-top: 10px; }
+  .empty { color: var(--dim); font-size: 14px; }
+</style>
+</head>
+<body>
+  <header><h1>TV Remote</h1><span id="status" class="pill">connecting…</span></header>
+  <div id="banner" hidden></div>
+  <div id="profiles" class="chips"></div>
+
+  <section class="card">
+    <div id="dpad">
+      <button class="txt" data-key="back">Back</button><button data-key="up">▲</button><button class="txt" id="night">Night</button>
+      <button data-key="left">◀</button><button class="ok" data-key="ok">OK</button><button data-key="right">▶</button>
+      <button class="txt" data-key="blue">Wallpaper</button><button data-key="down">▼</button><button class="txt" data-key="yellow">Change app</button>
+    </div>
+  </section>
+
+  <section class="card"><h2>Open</h2><div id="launch" class="grid"></div></section>
+
+  <section class="card">
+    <h2>Find something to watch</h2>
+    <form id="sform"><input id="q" placeholder="something funny, under 30 min…" autocomplete="off" enterkeyhint="search"><button class="go">Ask</button></form>
+    <div id="results"></div>
+    <div id="sinfo" class="hint">Claude suggests from what it knows, which may not match what's on your apps today.</div>
+  </section>
+
+  <section class="card">
+    <h2>Keep watching <small id="who"></small></h2>
+    <div id="watch"></div>
+    <details><summary>Add manually</summary>
+      <form id="mform"><input id="mt" placeholder="Title" required><input id="ms" placeholder="Episode or note (optional)"><select id="msv"></select><button class="go" style="padding:12px">Add</button></form>
+    </details>
+  </section>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const token = new URLSearchParams(location.search).get("token") || localStorage.getItem("tvtoken") || "";
+  try { localStorage.setItem("tvtoken", token); } catch (e) {}
+  let state = { tiles: [], profiles: [], profile: null, night: false, connected: false, claude: false };
+  let shownProfile = null, lastTilesKey = "";
+
+  function h(tag, attrs, ...kids) {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (k === "class") e.className = v; else if (k === "style") e.setAttribute("style", v); else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v);
+    }
+    kids.flat().forEach(c => e.append(c instanceof Node ? c : document.createTextNode(c ?? "")));
+    return e;
+  }
+
+  async function api(path, body) {
+    const url = path + (path.includes("?") ? "&" : "?") + "token=" + encodeURIComponent(token);
+    const r = await fetch(url, body === undefined ? {} : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || r.statusText);
+    return j;
+  }
+
+  async function cmd(c) {
+    try { const j = await api("/cmd", c); if (!j.connected) banner("The TV isn't connected to the relay. Is the launcher open?"); else banner(""); }
+    catch (e) { banner(e.message === "bad token" ? "Wrong token. Open the link shown in the TV's Settings." : "Can't reach the relay."); }
+  }
+  function banner(t) { const b = $("#banner"); b.hidden = !t; b.textContent = t || ""; }
+
+  // ---- d-pad: arrows repeat while held ----
+  document.querySelectorAll("#dpad [data-key]").forEach(btn => {
+    let t, i; const send = () => cmd({ type: "key", key: btn.dataset.key });
+    const stop = () => { clearTimeout(t); clearInterval(i); };
+    btn.addEventListener("pointerdown", e => { e.preventDefault(); send(); if (["up", "down", "left", "right"].includes(btn.dataset.key)) t = setTimeout(() => { i = setInterval(send, 140); }, 380); });
+    ["pointerup", "pointerleave", "pointercancel"].forEach(ev => btn.addEventListener(ev, stop));
+  });
+  $("#night").addEventListener("click", () => cmd({ type: "night" }));
+
+  // ---- state ----
+  function renderState() {
+    const st = $("#status"); st.textContent = state.connected ? "TV connected" : "TV offline"; st.className = "pill" + (state.connected ? " on" : "");
+    $("#night").textContent = state.night ? "Night: on" : "Night";
+    const pf = $("#profiles"); pf.replaceChildren(...(state.profiles || []).map(p => h("button", { class: "chip" + (p.id === state.profile ? " active" : ""), onclick: () => { cmd({ type: "profile", id: p.id }); state.profile = p.id; renderState(); } }, p.name)));
+    const key = JSON.stringify(state.tiles);
+    if (key !== lastTilesKey) {
+      lastTilesKey = key;
+      $("#launch").replaceChildren(...(state.tiles || []).map(t => h("button", { class: "app", onclick: () => cmd({ type: "launch", tile: t.id }) }, h("i", { style: "--c:" + t.color }, (t.label || "?")[0]), h("span", {}, t.label))));
+      $("#msv").replaceChildren(...(state.tiles || []).filter(t => t.type === "app").map(t => h("option", { value: t.id }, t.label)));
+    }
+    if (state.profile !== shownProfile) { shownProfile = state.profile; loadWatching(); }
+    const p = (state.profiles || []).find(p => p.id === state.profile); $("#who").textContent = p ? p.name : "";
+  }
+  async function poll() { try { state = Object.assign(state, await api("/state")); } catch (e) { state.connected = false; if (e.message === "bad token") banner("Wrong token. Open the link shown in the TV's Settings."); } renderState(); }
+
+  // ---- keep watching ----
+  async function loadWatching() {
+    if (!state.profile) return;
+    try { renderWatching((await api("/watching?profile=" + encodeURIComponent(state.profile))).items); } catch (e) {}
+  }
+  function renderWatching(items) {
+    const box = $("#watch");
+    if (!items.length) { box.replaceChildren(h("div", { class: "empty" }, "Nothing yet. Add something from a search above.")); return; }
+    box.replaceChildren(...items.map(w => h("div", { class: "item" },
+      h("span", { class: "dot", style: "--c:" + (w.color || "#555") }, (w.title || "?")[0]),
+      h("div", {}, h("div", { class: "t" }, w.title), h("small", {}, [w.service, w.sub].filter(Boolean).join(" · "))),
+      h("button", { "aria-label": "Remove", onclick: async () => renderWatching((await api("/watching/remove", { profile: state.profile, title: w.title })).items) }, "✕"))));
+  }
+  async function addWatching(item) {
+    renderWatching((await api("/watching", { profile: state.profile, item })).items);
+  }
+  $("#mform").addEventListener("submit", async e => {
+    e.preventDefault();
+    const t = (state.tiles || []).find(t => t.id === $("#msv").value) || {};
+    await addWatching({ tile: t.id || "", title: $("#mt").value, sub: $("#ms").value, service: t.label || "", color: t.color });
+    e.target.reset();
+  });
+
+  // ---- Claude search ----
+  $("#sform").addEventListener("submit", async e => {
+    e.preventDefault();
+    const q = $("#q").value.trim(); if (!q) return;
+    const out = $("#results"); out.replaceChildren(h("div", { class: "hint" }, "Asking Claude…"));
+    try {
+      const j = await api("/search", { query: q, profile: state.profile });
+      if (j.error) throw new Error(j.error);
+      if (!j.results.length) { out.replaceChildren(h("div", { class: "hint" }, "No suggestions. Try rephrasing.")); return; }
+      out.replaceChildren(...j.results.map(r => {
+        const tiles = (state.tiles || []).filter(t => t.type === "app");
+        const sel = r.tile ? null : h("select", {}, ...tiles.map(t => h("option", { value: t.id }, t.label)));
+        const tileOf = () => tiles.find(t => t.id === (r.tile || (sel && sel.value))) || {};
+        const add = h("button", { class: "primary" }, "+ Keep watching");
+        add.addEventListener("click", async () => { const t = tileOf(); await addWatching({ tile: t.id || "", title: r.title, sub: r.year, service: t.label || r.service, color: t.color || r.color }); add.textContent = "Added ✓"; add.disabled = true; });
+        const open = h("button", {}, r.tile ? "Open " + r.service : "Open app");
+        open.addEventListener("click", () => cmd({ type: "launch", tile: tileOf().id }));
+        return h("div", { class: "res" }, h("b", {}, r.title), h("span", { class: "y" }, r.year), h("p", {}, r.reason),
+          h("div", { class: "acts" }, h("span", { class: "tag" }, r.service || "Other"), sel, add, open));
+      }));
+    } catch (err) { out.replaceChildren(h("div", { class: "hint", style: "color:#ffb4a0" }, err.message)); }
+  });
+
+  poll(); setInterval(poll, 2500);
+})();
+</script>
+</body>
+</html>
